@@ -66,11 +66,11 @@ export class PokemonService {
     const pokemon = await this.findOne(term) ;
 
     if ( updatePokemonDto.name )
-      updatePokemonDto.name = updatePokemonDto.name.toLowerCase();
+      updatePokemonDto.name = updatePokemonDto.name.toLowerCase(); //validate only lowercase name property 
 
     await pokemon.updateOne( updatePokemonDto );
 
-    return { ...pokemon.toJSON(), ...updatePokemonDto };
+    return { ...pokemon.toJSON(), ...updatePokemonDto }; //to get the pokemon updated
   }
 
   remove(id: number) {
