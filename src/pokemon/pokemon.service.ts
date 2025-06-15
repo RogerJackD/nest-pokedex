@@ -63,7 +63,7 @@ export class PokemonService {
 
   async update(term: string, updatePokemonDto: UpdatePokemonDto) {
 
-    const pokemon = await this.findOne(term) ;
+    const pokemon = await this.findOne(term) ; //use logic of method get for get object pokemon 
 
     if ( updatePokemonDto.name )
       updatePokemonDto.name = updatePokemonDto.name.toLowerCase(); //validate only lowercase name property 
