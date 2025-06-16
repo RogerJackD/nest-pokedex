@@ -4,6 +4,7 @@ import { join } from 'path';
 import { MongooseModule } from '@nestjs/mongoose';
 
 import { PokemonModule } from './pokemon/pokemon.module';
+import { CommonModule } from './common/common.module';
 
 @Module({
   imports: [
@@ -12,7 +13,8 @@ import { PokemonModule } from './pokemon/pokemon.module';
       renderPath : '/'
     }),
     MongooseModule.forRoot('mongodb://localhost:27017/nest-pokemon'),
-    PokemonModule
+    PokemonModule,
+    CommonModule
   ],
 })
 export class AppModule {}
