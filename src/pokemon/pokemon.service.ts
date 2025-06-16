@@ -40,15 +40,17 @@ export class PokemonService {
 
     let pokemon: Pokemon | null = null;
 
+    //no 
     if( !isNaN(+term) ){
       pokemon = await this.pokemonModel.findOne({ no: term });
     }
 
     //mongoID
-    if ( !pokemon && isValidObjectId( term ) ) {  ///isValidObjectId function that also checks if is mongo id
+    if ( !pokemon && isValidObjectId( term ) ) {  ///isMongoId function that also checks if is mongo id
       pokemon = await this.pokemonModel.findById( term )
     }
     
+    //name 
     if ( !pokemon ) {
       pokemon = await this.pokemonModel.findOne({ name : term.toLowerCase().trim() })
     }
@@ -68,9 +70,19 @@ export class PokemonService {
     if ( updatePokemonDto.name )
       updatePokemonDto.name = updatePokemonDto.name.toLowerCase(); //validate only lowercase name property 
 
-    await pokemon.updateOne( updatePokemonDto );
+    try {
+  
+      await pokemon.updateOne( updatePokemonDto );
+  
+      return { ...pokemon.toJSON(), ...updatePokemonDto }; //to get the pokemon updated
+      
+    } catch (error) {
+      if( error.code === 11000){
+        throw new BadRequestException(`the property must be unique ${ JSON.stringify(error.keyValue) }`)
+      }
+      throw new InternalServerErrorException(`Cant do Patch pokemon - check server logs`)
+    }
 
-    return { ...pokemon.toJSON(), ...updatePokemonDto }; //to get the pokemon updated
   }
 
   remove(id: number) {
