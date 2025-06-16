@@ -22,11 +22,7 @@ export class PokemonService {
       return pokemon;
       
     } catch (error) {
-      if( error.code === 11000){
-        throw new BadRequestException(`Pokemon exist in DB ${ JSON.stringify( error.keyValue )}`)
-      }
-      console.log('error is: -' +error)
-      throw new InternalServerErrorException(`Cant create pokemon - check server logs`)
+      this.handleExceptions( error )
     }
 
     
@@ -60,7 +56,7 @@ export class PokemonService {
     }
 
 
-    return pokemon
+    return pokemon;
   }
 
   async update(term: string, updatePokemonDto: UpdatePokemonDto) {
@@ -71,16 +67,10 @@ export class PokemonService {
       updatePokemonDto.name = updatePokemonDto.name.toLowerCase(); //validate only lowercase name property 
 
     try {
-  
       await pokemon.updateOne( updatePokemonDto );
-  
       return { ...pokemon.toJSON(), ...updatePokemonDto }; //to get the pokemon updated
-      
     } catch (error) {
-      if( error.code === 11000){
-        throw new BadRequestException(`the property must be unique ${ JSON.stringify(error.keyValue) }`)
-      }
-      throw new InternalServerErrorException(`Cant do Patch pokemon - check server logs`)
+      this.handleExceptions( error );
     }
 
   }
@@ -88,4 +78,13 @@ export class PokemonService {
   remove(id: number) {
     return `This action removes a #${id} pokemon`;
   }
+
+
+  private handleExceptions( error : any){
+    if( error.code === 11000 ){
+      throw new BadRequestException(`the property must be unique ${ JSON.stringify(error.keyValue) }`);
+    }
+    throw new InternalServerErrorException(`Cant do this action - pokemon - check server logs`);
+  }
+
 }
