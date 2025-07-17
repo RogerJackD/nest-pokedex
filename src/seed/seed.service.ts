@@ -4,6 +4,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Pokemon } from 'src/pokemon/entities/pokemon.entity';
 import { Model } from 'mongoose';
 import { AxiosAdapter } from 'src/common/adapters/axios.adapter';
+import { FetchAdapter } from 'src/common/adapters/fetch.adapter';
 
 @Injectable()
 export class SeedService {
@@ -11,7 +12,7 @@ export class SeedService {
     @InjectModel(Pokemon.name)
     private readonly pokemonModel: Model<Pokemon>,
 
-    private readonly http: AxiosAdapter,
+    private readonly http: FetchAdapter,
   ) {}
 
 
