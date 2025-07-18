@@ -9,6 +9,10 @@ async function bootstrap() {
     new ValidationPipe({
       whitelist: true, //limpia la data innecesaria del request
       forbidNonWhitelisted: true, //habilita las reglas establecitas de nuestro DTO
+      transform: true, //transforma la informacion que fluye de los dtos
+      transformOptions: {
+        enableImplicitConversion: true,
+      }
     })
   )
 
